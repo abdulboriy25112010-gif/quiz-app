@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz App</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  .login-card {
+    background: white;
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 420px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+
+  .login-card h1 {
+    font-size: 2rem;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+
+  .login-card p {
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+  }
+
+  .login-card input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+
+  .login-card input:focus { border-color: #0f3460; }
+
+  .btn-start {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #0f3460, #533483);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .btn-start:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .error-msg {
+    background: #ffe5e5;
+    color: #c0392b;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    font-size: 0.9rem;
+    display: none;
+  }
+
+  /* ── QUIZ SCREEN ── */
+  #quiz-screen { display: none; padding: 24px; }
+
+  .quiz-header {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  .quiz-header h2 { color: #1a1a2e; font-size: 1.3rem; }
+
+  .quiz-meta { display: flex; gap: 24px; align-items: center; }
+
+  .meta-item {
+    text-align: center;
+    background: #f0f4f8;
+    padding: 8px 16px;
+    border-radius: 10px;
+  }
+
+  .meta-item .label { font-size: 0.75rem; color: #888; }
+  .meta-item .value { font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
+
+  .timer-value { color: #e74c3c !important; }
+
+  /* ── NOTEBOOK GRID ── */
+  .notebook-wrapper {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    position: relative;
+  }
+
+  /* red margin line like real notebook */
+  .notebook-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 56px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(220, 20, 60, 0.25);
+    border-radius: 2px;
+  }
+
+  .notebook-title {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .grid-section { margin-bottom: 32px; }
+
+  .section-label {
+    font-size: 0.8rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    padding-left: 40px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    padding-left: 40px;
+  }
+
+  .cell {
+    aspect-ratio: 1;
+    border: 2px solid #c8d6e5;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #2d3436;
+    background: #f8fafc;
+    transition: all 0.2s;
+    position: relative;
+    user-select: none;
+  }
+
+  .cell:hover:not(.answered) {
+    background: #e8f0fe;
+    border-color: #0f3460;
+    transform: scale(1.08);
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(15,52,96,0.2);
+  }
+
+  .cell.correct {
+    background: #27ae60;
+    border-color: #1e8449;
+    color: white;
+  }
+
+  .cell.incorrect {
+    background: #e74c3c;
+    border-color: #c0392b;
+    color: white;
+  }
+
+  .cell.skipped {
+    background: #bdc3c7;
+    border-color: #95a5a6;
+    color: white;
+  }
+
+  /* horizontal blue lines inside cells like notebook */
+  .cell::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    height: 1px;
+    background: rgba(52,152,219,0.2);
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.active { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 520px;
+    max-width: 95vw;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .modal-num {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .modal-question {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+
+  .option {
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #2d3436;
+    transition: all 0.2s;
+    text-align: left;
+    background: white;
+    font-weight: 500;
+  }
+
+  .option:hover:not(:disabled) { border-color: #0f3460; background: #f0f4ff; }
+
+  .option.selected-correct {
+    background: #d5f5e3;
+    border-color: #27ae60;
+    color: #1e8449;
+  }
+
+  .option.selected-incorrect {
+    background: #fde8e8;
+    border-color: #e74c3c;
+    color: #c0392b;
+  }
+
+  .option.show-correct {
+    background: #d5f5e3;
+    border-color: #27ae60;
+    color: #1e8449;
+  }
+
+  .feedback {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .feedback.correct { background: #d5f5e3; color: #1e8449; }
+  .feedback.incorrect { background: #fde8e8; color: #c0392b; }
+
+  .btn-close {
+    width: 100%;
+    padding: 14px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: none;
+    transition: opacity 0.2s;
+  }
+
+  .btn-close:hover { opacity: 0.85; }
+
+  /* ── RESULTS SCREEN ── */
+  #results-screen {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .results-card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+
+  .results-card h2 { font-size: 2rem; color: #1a1a2e; margin-bottom: 8px; }
+  .results-card .subtitle { color: #666; margin-bottom: 32px; }
+
+  .score-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 0 auto 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .score-circle.great { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+  .score-circle.good  { background: linear-gradient(135deg, #f39c12, #f1c40f); }
+  .score-circle.poor  { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+  .score-circle .score-label { font-size: 0.8rem; font-weight: 400; opacity: 0.9; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-box {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px 10px;
+  }
+
+  .stat-box .stat-num { font-size: 1.8rem; font-weight: 800; }
+  .stat-box .stat-label { font-size: 0.8rem; color: #888; margin-top: 4px; }
+  .stat-box.green .stat-num { color: #27ae60; }
+  .stat-box.red .stat-num { color: #e74c3c; }
+  .stat-box.blue .stat-num { color: #2980b9; }
+
+  .congrats-msg {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>📋 Quiz</h1>
+    <p>Enter your details to begin. The quiz can only be taken once.</p>
+    <input type="email" id="inp-email" placeholder="Your email address" />
+    <input type="text"  id="inp-name"  placeholder="Your full name"     />
+    <button class="btn-start" onclick="startQuiz()">Start Quiz →</button>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+</div>
+
+<!-- ── QUIZ ── -->
+<div id="quiz-screen">
+  <div class="quiz-header">
+    <h2 id="user-greeting">Hello!</h2>
+    <div class="quiz-meta">
+      <div class="meta-item">
+        <div class="label">Answered</div>
+        <div class="value" id="answered-count">0 / 30</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Score</div>
+        <div class="value" id="score-count">0</div>
+      </div>
+      <div class="meta-item">
+        <div class="label">Time</div>
+        <div class="value timer-value" id="timer-display">00:00</div>
+      </div>
+      <button class="btn-start" style="width:auto;padding:10px 24px;font-size:0.95rem;" onclick="submitQuiz()">
+        Submit
+      </button>
+    </div>
+  </div>
+
+  <div class="notebook-wrapper">
+    <div class="notebook-title">✏️ Click any number to answer the question</div>
+
+    <div class="grid-section">
+      <div class="section-label">Questions 1 – 10</div>
+      <div class="grid" id="grid-1"></div>
+    </div>
+    <div class="grid-section">
+      <div class="section-label">Questions 11 – 20</div>
+      <div class="grid" id="grid-2"></div>
+    </div>
+    <div class="grid-section">
+      <div class="section-label">Questions 21 – 30</div>
+      <div class="grid" id="grid-3"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-num" id="modal-num"></div>
+    <div class="modal-question" id="modal-question"></div>
+    <div class="options" id="modal-options"></div>
+    <div class="feedback" id="modal-feedback"></div>
+    <button class="btn-close" id="btn-close" onclick="closeModal()">✓ Close</button>
+  </div>
+</div>
+
+<!-- ── RESULTS ── -->
+<div id="results-screen">
+  <div class="results-card">
+    <h2>Quiz Complete! 🎉</h2>
+    <p class="subtitle" id="results-name"></p>
+    <div class="score-circle" id="score-circle">
+      <span id="score-pct"></span>
+      <span class="score-label">Score</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box green">
+        <div class="stat-num" id="stat-correct">0</div>
+        <div class="stat-label">✅ Correct</div>
+      </div>
+      <div class="stat-box red">
+        <div class="stat-num" id="stat-wrong">0</div>
+        <div class="stat-label">❌ Wrong</div>
+      </div>
+      <div class="stat-box blue">
+        <div class="stat-num" id="stat-time">0s</div>
+        <div class="stat-label">⏱ Time</div>
+      </div>
+    </div>
+    <p class="congrats-msg" id="congrats-msg"></p>
+  </div>
+</div>
+
+<script>
+let questions = [];
+let answers = {};
+let startTime = null;
+let timerInterval = null;
+let currentQ = null;
+
+// ─── START ───────────────────────────────────────
+async function startQuiz() {
+  const email = document.getElementById('inp-email').value.trim();
+  const name  = document.getElementById('inp-name').value.trim();
+  if (!email || !name) { showError('Please fill in both fields.'); return; }
+
+  const res = await fetch('/api/start', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email, name})
+  });
+  const data = await res.json();
+  if (data.error) { showError(data.error); return; }
+
+  questions = data.questions;
+  document.getElementById('user-greeting').textContent = `Hello, ${name}!`;
+  buildGrid();
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  startTime = Date.now();
+  startTimer();
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ─── GRID ─────────────────────────────────────────
+function buildGrid() {
+  for (let i = 1; i <= 30; i++) {
+    const grid = document.getElementById(`grid-${Math.ceil(i/10)}`);
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.id = `cell-${i}`;
+    cell.textContent = i;
+    cell.onclick = () => openModal(i);
+    grid.appendChild(cell);
+  }
+}
+
+function updateCell(qid, isCorrect) {
+  const cell = document.getElementById(`cell-${qid}`);
+  cell.classList.remove('correct', 'incorrect', 'skipped');
+  cell.classList.add(isCorrect ? 'correct' : 'incorrect');
+  cell.style.cursor = 'default';
+  cell.onclick = null;
+}
+
+// ─── TIMER ────────────────────────────────────────
+function startTimer() {
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+// ─── MODAL ────────────────────────────────────────
+function openModal(qid) {
+  if (answers[qid] !== undefined) return; // already answered
+  const q = questions.find(x => x.id === qid);
+  currentQ = q;
+
+  document.getElementById('modal-num').textContent = `Question ${qid} of 30`;
+  document.getElementById('modal-question').textContent = q.question;
+
+  const optContainer = document.getElementById('modal-options');
+  optContainer.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(opt, q.answer, q.id);
+    optContainer.appendChild(btn);
+  });
+
+  document.getElementById('modal-feedback').style.display = 'none';
+  document.getElementById('btn-close').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function selectAnswer(chosen, correct, qid) {
+  const isCorrect = chosen === correct;
+  answers[qid] = chosen;
+
+  // style options
+  document.querySelectorAll('.option').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === chosen) {
+      btn.classList.add(isCorrect ? 'selected-correct' : 'selected-incorrect');
+    }
+    if (!isCorrect && btn.textContent === correct) {
+      btn.classList.add('show-correct');
+    }
+  });
+
+  // feedback
+  const fb = document.getElementById('modal-feedback');
+  fb.textContent = isCorrect ? '✅ Correct!' : `❌ Wrong! The answer is: ${correct}`;
+  fb.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+  fb.style.display = 'block';
+
+  document.getElementById('btn-close').style.display = 'block';
+
+  // update counts
+  const answered = Object.keys(answers).length;
+  const score = Object.values(answers).filter((a, i) => {
+    const id = Object.keys(answers)[i];
+    const q = questions.find(x => x.id == id);
+    return q && a === q.answer;
+  }).length;
+  document.getElementById('answered-count').textContent = `${answered} / 30`;
+  document.getElementById('score-count').textContent = score;
+
+  updateCell(qid, isCorrect);
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+// ─── SUBMIT ───────────────────────────────────────
+async function submitQuiz() {
+  const unanswered = 30 - Object.keys(answers).length;
+  if (unanswered > 0) {
+    const ok = confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`);
+    if (!ok) return;
+  }
+
+  clearInterval(timerInterval);
+  const totalTime = Math.floor((Date.now() - startTime) / 1000);
+
+  const res = await fetch('/api/submit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({answers, totalTime})
+  });
+  const data = await res.json();
+  if (data.error) { alert(data.error); return; }
+
+  showResults(data.score, totalTime);
+}
+
+// ─── RESULTS ──────────────────────────────────────
+function showResults(score, time) {
+  document.getElementById('quiz-screen').style.display = 'none';
+  const rs = document.getElementById('results-screen');
+  rs.style.display = 'flex';
+
+  const pct = Math.round((score / 30) * 100);
+  const wrong = 30 - score - (30 - Object.keys(answers).length);
+  const mins = Math.floor(time / 60);
+  const secs = time % 60;
+
+  document.getElementById('score-pct').textContent = `${pct}%`;
+  document.getElementById('stat-correct').textContent = score;
+  document.getElementById('stat-wrong').textContent = Object.keys(answers).length - score;
+  document.getElementById('stat-time').textContent = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+  const circle = document.getElementById('score-circle');
+  circle.classList.remove('great', 'good', 'poor');
+  if (pct >= 70) circle.classList.add('great');
+  else if (pct >= 40) circle.classList.add('good');
+  else circle.classList.add('poor');
+
+  const msgs = {
+    great: 'Excellent work! You have a strong understanding of the material. 🌟',
+    good:  'Good effort! Keep studying and you\'ll do even better next time. 📚',
+    poor:  'Don\'t give up! Review the material and practice more. You\'ve got this! 💪'
+  };
+  document.getElementById('congrats-msg').textContent =
+    pct >= 70 ? msgs.great : pct >= 40 ? msgs.good : msgs.poor;
+}
+</script>
+</body>
+</html>
