@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder='static')
 app.secret_key = 'your-secret-key-change-this-in-production'
 
 RESULTS_FILE = 'results.xlsx'
-ADMIN_PASSWORD = 'admin123'  # Change this!
+ADMIN_PASSWORD = 'Behzod5664@'  # Change this!
 
 QUESTIONS = [
     {"id": 1, "question": "What is the capital of France?", "options": ["Berlin", "Madrid", "Paris", "Rome"], "answer": "Paris"},

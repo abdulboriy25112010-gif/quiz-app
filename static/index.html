@@ -396,10 +396,10 @@
 <div id="login-screen">
   <div class="login-card">
     <h1>📋 Quiz</h1>
-    <p>Enter your details to begin. The quiz can only be taken once.</p>
-    <input type="email" id="inp-email" placeholder="Your email address" />
-    <input type="text"  id="inp-name"  placeholder="Your full name"     />
-    <button class="btn-start" onclick="startQuiz()">Start Quiz →</button>
+    <p>Boshlash uchun ma'lumotlarni kiriting</p>
+    <input type="email" id="inp-email" placeholder="Email manzilingiz" />
+    <input type="text"  id="inp-name"  placeholder="To'liq ismingiz"     />
+    <button class="btn-start" onclick="startQuiz()">Testni boshlash →</button>
     <div class="error-msg" id="error-msg"></div>
   </div>
 </div>
@@ -414,21 +414,21 @@
         <div class="value" id="answered-count">0 / 30</div>
       </div>
       <div class="meta-item">
-        <div class="label">Score</div>
+        <div class="label">Ball</div>
         <div class="value" id="score-count">0</div>
       </div>
       <div class="meta-item">
-        <div class="label">Time</div>
+        <div class="label">Vaqt</div>
         <div class="value timer-value" id="timer-display">00:00</div>
       </div>
       <button class="btn-start" style="width:auto;padding:10px 24px;font-size:0.95rem;" onclick="submitQuiz()">
-        Submit
+        Yuborish
       </button>
     </div>
   </div>
 
   <div class="notebook-wrapper">
-    <div class="notebook-title">✏️ Click any number to answer the question</div>
+    <div class="notebook-title">✏️ Savol uchun raqamni bosing</div>
 
     <div class="grid-section">
       <div class="section-label">Questions 1 – 10</div>
@@ -459,24 +459,24 @@
 <!-- ── RESULTS ── -->
 <div id="results-screen">
   <div class="results-card">
-    <h2>Quiz Complete! 🎉</h2>
+    <h2>Test yakunlandi!</h2>
     <p class="subtitle" id="results-name"></p>
     <div class="score-circle" id="score-circle">
       <span id="score-pct"></span>
-      <span class="score-label">Score</span>
+      <span class="score-label">Ball</span>
     </div>
     <div class="stats-grid">
       <div class="stat-box green">
         <div class="stat-num" id="stat-correct">0</div>
-        <div class="stat-label">✅ Correct</div>
+        <div class="stat-label">✅ To'g'ri!</div>
       </div>
       <div class="stat-box red">
         <div class="stat-num" id="stat-wrong">0</div>
-        <div class="stat-label">❌ Wrong</div>
+        <div class="stat-label">❌ Noto'g'ri!</div>
       </div>
       <div class="stat-box blue">
         <div class="stat-num" id="stat-time">0s</div>
-        <div class="stat-label">⏱ Time</div>
+        <div class="stat-label">⏱ Vaqt</div>
       </div>
     </div>
     <p class="congrats-msg" id="congrats-msg"></p>
