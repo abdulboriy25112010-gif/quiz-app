@@ -9,39 +9,34 @@ app = Flask(__name__, static_folder='static')
 app.secret_key = 'your-secret-key-change-this-in-production'
 
 RESULTS_FILE = 'results.xlsx'
-ADMIN_PASSWORD = 'Behzod5664@'  # Change this!
+ADMIN_PASSWORD = 'admin123'  # Change this!
 
 QUESTIONS = [
-    {"id": 1, "question": "Hozirgi O‘zbekiston hududida joylashgan qadimgi sivilizatsiya qaysi?", "options": ["Mesopotamiya", "So‘g‘diyona", "Misr", "Hind vodiysi"], "answer": "So‘g‘diyona"},
-    {"id": 2, "question": "Samarqand qaysi savdo yo‘lining muhim markazi bo‘lgan?", "options": ["Ziravorlar yo‘li", "Ipak yo‘li", "Qahrabo yo‘li", "Ot-cho‘y yo‘li"], "answer": "Ipak yo‘li"},
-    {"id": 3, "question": "Temuriylar davlatiga kim asos solgan?", "options": ["Chingizxon", "Bobur", "Amir Temur", "Ulug‘bek"], "answer": "Amir Temur"},
-    {"id": 4, "question": "Amir Temur yana qanday nom bilan tanilgan?", "options": ["Aleksandr", "Tamerlan", "Sulaymon", "Attila"], "answer": "Tamerlan"},
-    {"id": 5, "question": "Temurdan oldin hudud qaysi imperiya tarkibida bo‘lgan?", "options": ["Usmonli", "Mo‘g‘ullar", "Rim", "Fors"], "answer": "Mo‘g‘ullar"},
-    {"id": 6, "question": "Ulug‘bek qaysi sohada mashhur bo‘lgan?", "options": ["Tibbiyot", "Astronomiya", "Me’morchilik", "Adabiyot"], "answer": "Astronomiya"},
-    {"id": 7, "question": "Ulug‘bek rasadxonasi qayerda joylashgan?", "options": ["Buxoro", "Xiva", "Samarqand", "Toshkent"], "answer": "Samarqand"},
-    {"id": 8, "question": "Bobur qayerda imperiya asos solgan?", "options": ["Xitoy", "Hindiston", "Eron", "Turkiya"], "answer": "Hindiston"},
-    {"id": 9, "question": "Xiva xonligi markazi qaysi edi?", "options": ["Qo‘qon", "Buxoro", "Xiva", "Oltin O‘rda"], "answer": "Xiva"},
-    {"id": 10, "question": "19-asrda O‘zbekiston qaysi imperiyaga qo‘shilgan?", "options": ["Britaniya", "Rossiya", "Usmonli", "Xitoy"], "answer": "Rossiya"},
-    {"id": 11, "question": "Sovet davrida O‘zbekiston qanday nomlangan?", "options": ["Markaziy SSR", "O‘zbek SSR", "Turkiston SSR", "Sovet Osiyo"], "answer": "O‘zbek SSR"},
-    {"id": 12, "question": "O‘zbekiston qachon mustaqillikka erishgan?", "options": ["1989", "1990", "1991", "1992"], "answer": "1991"},
-    {"id": 13, "question": "Birinchi prezident kim bo‘lgan?", "options": ["Mirziyoyev", "Karimov", "Niyazov", "Nazarboyev"], "answer": "Karimov"},
-    {"id": 14, "question": "O‘zbekiston poytaxti qaysi?", "options": ["Samarqand", "Buxoro", "Toshkent", "Xiva"], "answer": "Toshkent"},
-    {"id": 15, "question": "Ichon Qal’a qaysi shaharda?", "options": ["Samarqand", "Xiva", "Buxoro", "Nukus"], "answer": "Xiva"},
-    {"id": 16, "question": "So‘g‘diylar asosan nima bilan shug‘ullangan?", "options": ["Urush", "Savdo", "Dehqonchilik", "Chorvachilik"], "answer": "Savdo"},
-    {"id": 17, "question": "Islomdan oldin keng tarqalgan din qaysi?", "options": ["Xristianlik", "Buddizm", "Zardushtiylik", "Hinduizm"], "answer": "Zardushtiylik"},
-    {"id": 18, "question": "Islom dini qachon kirib kelgan?", "options": ["Yunonlar", "Arablar", "Mo‘g‘ullar", "Ruslar"], "answer": "Arablar"},
-    {"id": 19, "question": "Ibn Sino qaysi sohada mashhur?", "options": ["Matematika", "Tibbiyot", "Astronomiya", "Adabiyot"], "answer": "Tibbiyot"},
-    {"id": 20, "question": "Al-Xorazmiy nimaning asoschisi?", "options": ["Geometriya", "Algebra", "Fizika", "Kimyo"], "answer": "Algebra"},
-    {"id": 21, "question": "Qaysi dengiz qurib bormoqda?", "options": ["Kaspiy", "Qora", "Orol", "O‘rta yer"], "answer": "Orol"},
-    {"id": 22, "question": "Jadidlar harakati maqsadi nima?", "options": ["Urush", "Islohot", "Savdo", "Bosqin"], "answer": "Islohot"},
-    {"id": 23, "question": "Sovet boshida o‘zbek yozuvi qaysi edi?", "options": ["Arab", "Kirill", "Lotin", "Xitoy"], "answer": "Lotin"},
-    {"id": 24, "question": "Qaysi shahar ilm markazi bo‘lgan?", "options": ["Toshkent", "Buxoro", "Nukus", "Termiz"], "answer": "Buxoro"},
-    {"id": 25, "question": "Oltin O‘rda qaysi imperiyaga tegishli?", "options": ["Usmonli", "Mo‘g‘ul", "Fors", "Rim"], "answer": "Mo‘g‘ul"},
-    {"id": 26, "question": "Registon qayerda joylashgan?", "options": ["Buxoro", "Samarqand", "Xiva", "Andijon"], "answer": "Samarqand"},
-    {"id": 27, "question": "Karimovdan keyin kim prezident bo‘lgan?", "options": ["Rahmon", "Mirziyoyev", "Putin", "Aliyev"], "answer": "Mirziyoyev"},
-    {"id": 28, "question": "Movarounnahr nimani anglatadi?", "options": ["Kaspiy orti", "Ikki daryo oralig‘i", "Rossiya", "Xitoy"], "answer": "Ikki daryo oralig‘i"},
-    {"id": 29, "question": "13-asr bosqini qaysi?", "options": ["Arab", "Mo‘g‘ul", "Fors", "Yunon"], "answer": "Mo‘g‘ul"},
-    {"id": 30, "question": "Eng qadimiy shaharlardan biri qaysi?", "options": ["Nukus", "Samarqand", "Toshkent", "Andijon"], "answer": "Samarqand"},
+    {"id": 1, "question": "Falsafa so'zi qaysi tildan olingan va uning ma'nosi nima?", "options": ["Lotin tilidan, «ilm-fan» ma'nosi", "Yunoncha «philos» va «sophia», «donishmandlikni sevish»", "Arabcha tilidan, «hikmat» ma'nosi", "Fors tilidan, «aql» ma'nosi"], "answer": "Yunoncha «philos» va «sophia», «donishmandlikni sevish»"},
+    {"id": 2, "question": "Qadimgi Yunonistonda falsafaning asosiy muammosi nima edi?", "options": ["Davlat boshqaruvi muammosi", "Borliq va mavjudlikning mohiyati", "Iqtisodiy munosabatlar", "Harbiy strategiya"], "answer": "Borliq va mavjudlikning mohiyati"},
+    {"id": 3, "question": "Ontologiya nimani o'rganadi?", "options": ["Bilish jarayonini", "Borliq va mavjudlikning asosiy tamoyillarini", "Axloq va odobni", "Jamiyat tuzilishini"], "answer": "Borliq va mavjudlikning asosiy tamoyillarini"},
+    {"id": 4, "question": "Gnoseologiya falsafaning qaysi sohasiga kiradi?", "options": ["Borliq haqidagi ta'limotga", "Bilish nazariyasiga", "Axloq falsafasiga", "Estetikaga"], "answer": "Bilish nazariyasiga"},
+    {"id": 5, "question": "Quyidagi faylasuflardan qaysi biri antik davr faylasufi hisoblanadi?", "options": ["Immanuel Kant", "René Descartes", "Sokrat", "Karl Marks"], "answer": "Sokrat"},
+    {"id": 6, "question": "«Men faqat bitta narsani bilaman — hech narsa bilmasligimni» — bu fikr kimga tegishli?", "options": ["Platonga", "Aristotelga", "Sokratga", "Epikurga"], "answer": "Sokratga"},
+    {"id": 7, "question": "Platon qaysi falsafiy tushunchani asosiy deb hisoblagan?", "options": ["Materiya", "G'oyalar (ideya) olami", "Atom", "Energiya"], "answer": "G'oyalar (ideya) olami"},
+    {"id": 8, "question": "Aristotelning mantiq haqidagi asarlari to'plami qanday nomlanadi?", "options": ["«Metafizika»", "«Siyosat»", "«Organon»", "«Etika»"], "answer": "«Organon»"},
+    {"id": 9, "question": "Materializm va idealizm o'rtasidagi asosiy farq nimada?", "options": ["Metodologiyada", "Birlamchi — materiya yoki ong ekanligini belgilashda", "Axloqiy qarashlarda", "Siyosiy pozitsiyalarda"], "answer": "Birlamchi — materiya yoki ong ekanligini belgilashda"},
+    {"id": 10, "question": "Dialektika nima?", "options": ["Fizika qonunlari tizimi", "Qarama-qarshiliklar birligi orqali taraqqiyotni tushuntiruvchi ta'limot", "Mantiqiy xatolarni aniqlash usuli", "Tarixiy faktlarni o'rganish metodi"], "answer": "Qarama-qarshiliklar birligi orqali taraqqiyotni tushuntiruvchi ta'limot"},
+    {"id": 11, "question": "Ibn Sino (Avitsenna) falsafasining asosiy yo'nalishi qaysi?", "options": ["Skeptitsizm", "Neoplatonizm va aristotelizm sintezi", "Nihilizm", "Pragmatizm"], "answer": "Neoplatonizm va aristotelizm sintezi"},
+    {"id": 12, "question": "Al-Forobiy qaysi unvon bilan tanilgan?", "options": ["«Sharq faylasufi»", "«Ikkinchi muallim» (Muallim us-soniy)", "«Donishmandlar donishmandi»", "«Birinchi tabib»"], "answer": "«Ikkinchi muallim» (Muallim us-soniy)"},
+    {"id": 13, "question": "Dekart falsafasining asosiy tamoyili qaysi?", "options": ["«Borliq — harakat»", "«Cogito ergo sum» — «Men o'ylayman, demak mavjudman»", "«Bilim — kuch»", "«Hamma narsa oqadi»"], "answer": "«Cogito ergo sum» — «Men o'ylayman, demak mavjudman»"},
+    {"id": 14, "question": "Kantning bosh falsafiy asari qanday nomlanadi?", "options": ["«Aql haqida nutq»", "«Sof aqlning tanqidi»", "«Ijtimoiy shartnoma»", "«Leviafan»"], "answer": "«Sof aqlning tanqidi»"},
+    {"id": 15, "question": "Gegelning dialektik metodidagi uchlik (triada) qanday tushunchalardan iborat?", "options": ["Materiya, harakat, fazo", "Tezis, antitezis, sintez", "Sabab, natija, maqsad", "Idea, ruh, tabiat"], "answer": "Tezis, antitezis, sintez"},
+    {"id": 16, "question": "Marksizm falsafasining asosiy tamoyili nima?", "options": ["Idealistik dialektika", "Dialektik va tarixiy materializm", "Pragmatizm", "Ekzistentsializm"], "answer": "Dialektik va tarixiy materializm"},
+    {"id": 17, "question": "Ekzistentsializm falsafasining asosiy muammosi nima?", "options": ["Tabiat qonunlari", "Insonning erkinligi, tanlovi va mas'uliyati", "Ijtimoiy adolat", "Bilishning chegaralari"], "answer": "Insonning erkinligi, tanlovi va mas'uliyati"},
+    {"id": 18, "question": "«Inson — o'z mohiyatini o'zi yaratadi» — bu fikr qaysi yo'nalishga xos?", "options": ["Stoitsizm", "Ekzistentsializm (J.-P. Sartr)", "Pozitivizm", "Empirizm"], "answer": "Ekzistentsializm (J.-P. Sartr)"},
+    {"id": 19, "question": "Pragmatizm falsafasiga ko'ra haqiqat nima?", "options": ["Ilohiy vahiy", "Amalda foydali va samarali bo'lgan narsa", "Mantiqiy xulosalarning to'g'riligi", "Sezgi organlarimiz bergan ma'lumot"], "answer": "Amalda foydali va samarali bo'lgan narsa"},
+    {"id": 20, "question": "Empirizm ta'limotiga ko'ra bilimning asosiy manbai nima?", "options": ["Tug'ma g'oyalar", "Tajriba va sezgi", "Ilohiy aql", "Mantiqiy deduksiya"], "answer": "Tajriba va sezgi"},
+    {"id": 21, "question": "Falsafada «agnostitsizm» nimani anglatadi?", "options": ["Xudoning mavjudligini inkor etish", "Dunyoni to'liq bilish mumkin emasligini ta'kidlash", "Barcha narsalarni bilish mumkinligiga ishonch", "Faqat moddiy narsalar mavjudligini ta'kidlash"], "answer": "Dunyoni to'liq bilish mumkin emasligini ta'kidlash"},
+    {"id": 22, "question": "Axloq falsafasida «kategorik imperativ» tushunchasi kimga tegishli?", "options": ["Gegelga", "Kantga", "Nitsshega", "Shopengauerga"], "answer": "Kantga"},
+    {"id": 23, "question": "Nitsshening «Xudo o'ldi» iborasi nimani anglatadi?", "options": ["Xristianlikning qulashi", "An'anaviy qadriyatlar va mutlaq haqiqatning inqirozi", "Ateizmning g'alabasini", "Insoniyatning halokati"], "answer": "An'anaviy qadriyatlar va mutlaq haqiqatning inqirozi"},
+    {"id": 24, "question": "Falsafada «hermenevtika» nima?", "options": ["Arxeologik qazishmalar usuli", "Matnlarni tushunish va talqin qilish nazariyasi", "Riyoziyot tarmog'i", "Tabiiy hodisalarni o'rganish metodi"], "answer": "Matnlarni tushunish va talqin qilish nazariyasi"},
+    {"id": 25, "question": "Zamonaviy falsafada «postmodernizm» qaysi g'oyani markazga qo'yadi?", "options": ["Yagona mutlaq haqiqat mavjudligini", "Haqiqat ko'pqirrali va nisbiy, «katta rivoyatlar»ni rad etish", "Ilm-fan cheksiz taraqqiyotini", "Insonning tabiat ustidan hukmronligini"], "answer": "Haqiqat ko'pqirrali va nisbiy, «katta rivoyatlar»ni rad etish"},
 ]
 
 def get_completed_users():
@@ -59,16 +54,15 @@ def save_result(email, name, answers, score, total_time):
     if not os.path.exists(RESULTS_FILE):
         wb = openpyxl.Workbook()
         ws = wb.active
-        ws.title = "Quiz Results"
-        ws.append(["Email", "Full Name", "Score", "Total Questions", "Percentage", "Time Taken (s)", "Date", "Answers"])
+        ws.title = "Test natijalari"
+        ws.append(["Email", "To'liq ism", "Ball", "Jami savollar", "Foiz", "Ketgan vaqt (s)", "Sana", "Javoblar"])
     else:
         wb = load_workbook(RESULTS_FILE)
         ws = wb.active
-
-    percentage = round((score / 30) * 100, 1)
+    percentage = round((score / 25) * 100, 1)
     date_str = datetime.now().strftime("%Y-%m-%d %H:%M")
-    answers_str = json.dumps(answers)
-    ws.append([email, name, score, 30, f"{percentage}%", total_time, date_str, answers_str])
+    answers_str = json.dumps(answers, ensure_ascii=False)
+    ws.append([email, name, score, 25, f"{percentage}%", total_time, date_str, answers_str])
     wb.save(RESULTS_FILE)
 
 @app.route('/')
@@ -81,10 +75,10 @@ def start_quiz():
     email = data.get('email', '').lower().strip()
     name = data.get('name', '').strip()
     if not email or not name:
-        return jsonify({'error': 'Email and name are required'}), 400
+        return jsonify({'error': 'Email va ism kiritilishi shart'}), 400
     completed = get_completed_users()
     if email in completed:
-        return jsonify({'error': 'You have already completed this quiz. It can only be taken once.'}), 403
+        return jsonify({'error': 'Siz bu testni allaqachon topshirgansiz. Test faqat bir marta topshirilishi mumkin.'}), 403
     session['email'] = email
     session['name'] = name
     return jsonify({'success': True, 'questions': QUESTIONS})
@@ -95,10 +89,10 @@ def submit_quiz():
     email = session.get('email')
     name = session.get('name')
     if not email:
-        return jsonify({'error': 'Session expired. Please restart.'}), 401
+        return jsonify({'error': 'Sessiya tugadi. Qaytadan boshlang.'}), 401
     completed = get_completed_users()
     if email in completed:
-        return jsonify({'error': 'Already submitted.'}), 403
+        return jsonify({'error': 'Allaqachon topshirilgan.'}), 403
     answers = data.get('answers', {})
     total_time = data.get('totalTime', 0)
     score = 0
@@ -113,13 +107,13 @@ def submit_quiz():
         result_details[qid] = {'userAnswer': user_ans, 'correct': correct, 'isCorrect': is_correct}
     save_result(email, name, result_details, score, total_time)
     session.clear()
-    return jsonify({'success': True, 'score': score, 'total': 30, 'details': result_details})
+    return jsonify({'success': True, 'score': score, 'total': 25, 'details': result_details})
 
 @app.route('/api/admin/results')
 def admin_results():
     password = request.args.get('password', '')
     if password != ADMIN_PASSWORD:
-        return jsonify({'error': 'Unauthorized'}), 401
+        return jsonify({'error': 'Ruxsat yoq'}), 401
     if not os.path.exists(RESULTS_FILE):
         return jsonify({'results': []})
     wb = load_workbook(RESULTS_FILE)
@@ -134,9 +128,9 @@ def admin_results():
 def download_excel():
     password = request.args.get('password', '')
     if password != ADMIN_PASSWORD:
-        return jsonify({'error': 'Unauthorized'}), 401
+        return jsonify({'error': 'Ruxsat yoq'}), 401
     if not os.path.exists(RESULTS_FILE):
-        return jsonify({'error': 'No results yet'}), 404
+        return jsonify({'error': 'Hali natijalar yoq'}), 404
     return send_from_directory('.', RESULTS_FILE, as_attachment=True)
 
 if __name__ == '__main__':
